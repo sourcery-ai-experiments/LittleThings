@@ -55,6 +55,10 @@ class LittleListener(parent: LittleThings) : Listener {
         val block = player.location.block
         val belowBlock = block.getRelative(0, -1, 0)
 
+        if (!playerParkor.containsKey(player.name)) {
+            playerParkor[player.name] = false
+        }
+
         // The player is walking on magenta glazed terracotta
         if (belowBlock.type == Material.MAGENTA_GLAZED_TERRACOTTA) {
             // Get the direction of the block
@@ -83,7 +87,7 @@ class LittleListener(parent: LittleThings) : Listener {
         }
 
         // If the player has just finished the parkour
-        if (playerParkor.containsKey(player.name) && playerParkor[player.name] == true) {
+        if (playerParkor[player.name] == true) {
             // Make the player jump up
             player.velocity = player.velocity.add(Vector(0.0, 1.0, 0.0))
             // Display particles
