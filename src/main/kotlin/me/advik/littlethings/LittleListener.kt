@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.vehicle.VehicleMoveEvent
 import org.bukkit.util.Vector
 import org.bukkit.Particle
+import org.bukkit.event.player.PlayerJoinEvent
 import java.util.logging.Logger
 
 class LittleListener(parent: LittleThings) : Listener {
@@ -102,5 +103,10 @@ class LittleListener(parent: LittleThings) : Listener {
     fun unregister() {
         VehicleMoveEvent.getHandlerList().unregister(this)
         PlayerMoveEvent.getHandlerList().unregister(this)
+    }
+
+    @EventHandler
+    fun onPlayerJoin(event: PlayerJoinEvent) {
+        playerParkor[event.player.name] = false
     }
 }
