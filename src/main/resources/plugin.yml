@@ -1,0 +1,4 @@
+name: LittleThings
+version: '${project.version}'
+main: me.advik.littlethings.LittleThings
+api-version: '1.20'
