@@ -1,6 +1,5 @@
 package me.advik.littlethings
 
-import io.papermc.paper.entity.LookAnchor
 import org.bukkit.Material
 import org.bukkit.entity.Minecart
 import org.bukkit.event.EventHandler
@@ -10,6 +9,9 @@ import org.bukkit.event.vehicle.VehicleMoveEvent
 import org.bukkit.util.Vector
 import org.bukkit.Particle
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.entity.SmallFireball
+import org.bukkit.event.block.Action
+import org.bukkit.event.player.PlayerInteractEvent
 import java.util.logging.Logger
 
 class LittleListener(parent: LittleThings) : Listener {
@@ -103,10 +105,31 @@ class LittleListener(parent: LittleThings) : Listener {
     fun unregister() {
         VehicleMoveEvent.getHandlerList().unregister(this)
         PlayerMoveEvent.getHandlerList().unregister(this)
+        PlayerJoinEvent.getHandlerList().unregister(this)
+        PlayerInteractEvent.getHandlerList().unregister(this)
     }
 
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent) {
         playerParkor[event.player.name] = false
+    }
+
+    @EventHandler
+    fun onPlayerInteract(event: PlayerInteractEvent) {
+        val player = event.player
+        val item = event.item
+
+        if (item != null && item.type == Material.FIRE_CHARGE) {
+            if (event.action == Action.RIGHT_CLICK_AIR || event.action == Action.RIGHT_CLICK_BLOCK) {
+                // Cancel the event
+                event.isCancelled = true
+
+                // Launch a ghast fireball
+                val direction = player.location.direction
+                var fireball = player.launchProjectile(SmallFireball::class.java, direction.multiply(2))
+                fireball.yield = 1F
+                fireball.setIsIncendiary(true);
+            }
+        }
     }
 }
